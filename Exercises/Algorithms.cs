@@ -580,6 +580,136 @@ public static class Algorithms
         return result;
     }
 
+    public static int FrogJumps(int x, int y, int d)
+    {
+        /*
+         * A small frog wants to get to the other side of the road. The frog is currently located at position X and
+         * wants to get to a position greater than or equal to Y. The small frog always jumps a fixed distance, D.
+         *
+         * Count the minimal number of jumps that the small frog must perform to reach its target.
+         *
+         * X = 10
+         * Y = 85
+         * D = 30
+         *
+         * the function should return 3
+         *
+         */
+
+        /*
+         * Time complexity: O(1)
+         *
+         * Calculate Y - X and divide the result by D.
+         * Then, use Ceiling to get the smallest integer >= to the calculated decimal value
+         */
+        if (x == y)
+            return 0;
+
+        var jumps = (int)Math.Ceiling((decimal)(y - x) / d);
+
+        return jumps;
+    }
+
+    public static int FindMissingInteger_Solution1(int[] a)
+    {
+        /*
+            An array A consisting of N different integers is given. 
+            The array contains integers in the range [1..(N + 1)], which means that exactly one element is missing.
+            Your goal is to find that missing element.
+
+            - N is an integer within the range [0..100,000];
+            - the elements of A are all distinct;
+            - each element of array A is an integer within the range [1..(N + 1)].
+
+            Examples:
+                A = []      => 1
+                A = [1]     => 2
+                A = [2]     => 1
+                A = [1,3,4] => 2
+                A = [1,2,3] => 4
+                A = [2,3,4] => 1
+                A = [1,3]   => 1
+        */
+
+        // Time complexity: O(N * log(N))
+        // See Solution #2 for a more efficient solution which is O(N)
+
+        var result = 1;
+
+        if (a.Length == 0)
+            return result;
+
+        if (a.Length == 1 && a[0] == 1)
+            return result + 1;
+
+        if (a.Length == 1 && a[0] == 2)
+            return result;
+
+        Array.Sort(a);
+
+        for (var i = 0; i < a.Length; i++)
+        {
+            var curr = a[i];
+
+            if (curr == i + 1)
+            {
+                result = curr + 1;
+            }
+            else
+            {
+                result = i + 1;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public static int FindMissingInteger_Solution2(int[] a)
+    {
+        /*
+            An array A consisting of N different integers is given. 
+            The array contains integers in the range [1..(N + 1)], which means that exactly one element is missing.
+            Your goal is to find that missing element.
+
+            - N is an integer within the range [0..100,000];
+            - the elements of A are all distinct;
+            - each element of array A is an integer within the range [1..(N + 1)].
+
+            Examples:
+                A = []      => 1
+                A = [1]     => 2
+                A = [2]     => 1
+                A = [1,3,4] => 2
+                A = [1,2,3] => 4
+                A = [2,3,4] => 1
+                A = [1,3]   => 1
+        */
+
+        // Time complexity: O(N)
+
+        if (a.Length == 0)
+            return 1;
+
+        // Sum elements of array
+        // Using LINQ you can do: var sum = a.Select(x => (long)x).Sum();
+        // Parse to long to prevent overflow
+
+        long sum = 0;
+
+        for (var i = 0; i < a.Length; i++)
+        {
+            sum += (long)a[i];
+        }
+
+        // Sum of consecutive integers from 1 to N  = N * (N + 1) / 2
+        long n = a.Length + 1;
+        long totalSum = n * (n + 1) / 2;
+
+        // The difference is the missing element
+        return (int)(totalSum - sum);
+    }
+
     #region Private Method(s)
 
     private static string RemoveDuplicates(string s)

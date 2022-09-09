@@ -210,8 +210,21 @@ namespace Exercises.UnitTests
             var arr1 = new int[] { 1000, 801, 100, 1000, 100 };
 
             var result1 = Algorithms.FindUnpairedNumber_Solution2(arr1);
+
             
             Assert.Equal(801, result1);
+        }
+
+        [Fact]
+        public void Frog_Jumps()
+        {
+            var x = 50;
+            var y = 101;
+            var d = 2;
+
+            var result = Algorithms.FrogJumps(x, y, d);
+
+            Assert.Equal(26, result);
         }
     }
 }
