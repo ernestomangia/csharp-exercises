@@ -1,4 +1,6 @@
-﻿namespace Exercises;
+﻿using System.Text;
+
+namespace Exercises;
 
 public static class Algorithms
 {
@@ -19,15 +21,12 @@ public static class Algorithms
 
         var arr = new int[26];
 
-        var s1 = a.ToCharArray();
-        var s2 = b.ToCharArray();
-
-        foreach (var l in s1)
+        foreach (var l in a)
         {
             arr[l - 'a'] += 1;
         }
 
-        foreach (var l in s2)
+        foreach (var l in b)
         {
             arr[l - 'a'] -= 1;
         }
@@ -68,4 +67,429 @@ public static class Algorithms
         // The final count should be equals to the letter in ASCII code
         return (char)count;
     }
+
+    public static int AlternatingCharacters(string s)
+    {
+        /*
+         * You are given a string containing characters  and  only.
+         * Your task is to change it into a string such that there are no matching adjacent characters.
+         * To do this, you are allowed to delete zero or more characters in the string.
+         * Your task is to find the minimum number of required deletions.
+         *
+         * Example
+         * s = AABAAB
+         * Remove an A at positions 0 and 3 to make s = ABAB in 2 deletions.
+         *
+         */
+
+        var deletions = 0;
+
+        for (var i = 1; i < s.Length; i++)
+        {
+            if (s[i] == s[i - 1])
+                deletions++;
+        }
+
+        return deletions;
+    }
+
+    public static string IsValidSherlockString(string s)
+    {
+        var counts = new int[26];
+
+        // Count character frequencies
+        foreach (var l in s)
+            counts[l - 'a']++;
+
+        // Filter out characters that didn't appeared (count = 0)
+        var filteredCounts = counts
+            .Where(e => e > 0)
+            .ToArray();
+
+        // This means the string contains the same character, which is a valid case
+        if (filteredCounts.Length <= 1)
+            return "YES";
+
+        // Sort has O(n) time complexity
+        Array.Sort(filteredCounts);
+
+        var first = filteredCounts[0];
+        var second = filteredCounts[1];
+        var penultimate = filteredCounts[^2]; // using "hat" operator: index from end
+        var last = filteredCounts[^1];
+
+        // All frequencies are equals
+        if (first == last)
+            return "YES";
+
+        // Character with frequency = 1 can be removed
+        if (first == 1
+            && second == last)
+            return "YES";
+
+        // One character with frequency = last can be removed
+        if (first == second
+            && second == penultimate
+            && (last - penultimate) == 1)
+            return "YES";
+
+        return "NO";
+    }
+
+    public static long SubstringCount(int n, string s)
+    {
+        if (n == 1)
+            return n;
+
+        // Each individual character counts 
+        var count = n;
+
+        // Solution works however is not the most efficient one
+        // This is O(N^2)
+        for (var i = 0; i < n - 1; i++)
+        {
+            for (var j = 1; j < n - i; j++)
+            {
+                var substring = s.Substring(i, j + 1);
+
+                if (substring.Distinct().Count() == 1)
+                {
+                    count++;
+                }
+                else if (substring.Length == 3)
+                {
+                    var first = substring[0];
+                    var third = substring[2];
+
+                    if (first == third)
+                        count++;
+
+                    break;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public static int FlippingMatrix(List<List<int>> matrix)
+    {
+        /*
+         * Sean invented a game involving a  matrix where each cell of the matrix contains an integer.
+         * He can reverse any of its rows or columns any number of times.
+         * The goal of the game is to maximize the sum of the elements in the submatrix located in the upper-left quadrant of the matrix.
+         * Given the initial configurations for  matrices, help Sean reverse the rows and columns of each matrix in the best possible way so that the sum of the elements in the matrix's upper-left quadrant is maximal.
+         *
+         * Example 1
+         * 1 2      =>      4 2 
+         * 3 4              1 3
+         * Result: 4
+         *
+         * Example 2
+         * 112 42 83 119            119 114 42  112 
+         * 56 125 56 49     =>      56  125 101 49
+         * 15 78 101 43             15  78  56  43
+         * 62 98 114 108            62  98  83  108
+         *
+         * Result: 119 + 114 + 56 + 125 414
+         * 
+         */
+
+        /*
+         * The pattern that solves this problem is the following one:
+         *
+         * A) Matrix 2x2 (n = 1)
+         *    a a
+         *    a a
+         *
+         *    MaxSum = Max(a)
+         *
+         * B) Matrix 4x4 (n = 2)
+         *    a b b a
+         *    c d d c
+         *    c d d c
+         *    a b b a
+         *
+         *    MaxSum = Max(a) + Max(b) + Max(c) + Max(d)
+         *
+         * C) Matrix 6x6 (n = 3)
+         *    a b c c b a
+         *    d e f f e d
+         *    g h i i h g
+         *    g h i i h g
+         *    d e f f e d
+         *    a b c c b a
+         *
+         *    MaxSum = Max(a) + Max(b) + Max(c) + Max(d) + Max(e) + Max(f) + Max(g) + Max(h) + Max(i)
+         *
+         */
+
+        var maxSum = 0;
+        var n = matrix.Count / 2;
+
+        for (var i = 0; i < n; i++)
+        {
+            for (var j = 0; j < n; j++)
+            {
+                var max = 0;
+
+                max = Math.Max(matrix[i][j], max);
+                max = Math.Max(matrix[i][n * 2 - j - 1], max);
+                max = Math.Max(matrix[n * 2 - i - 1][j], max);
+                max = Math.Max(matrix[n * 2 - i - 1][n * 2 - j - 1], max);
+
+                maxSum += max;
+            }
+        }
+
+        return maxSum;
+    }
+
+    public static string MinimumBribes(List<int> q)
+    {
+        /*
+         * It is New Year's Day and people are in line for the Wonderland rollercoaster ride.
+         * Each person wears a sticker indicating their initial position in the queue from 1 to N.
+         * Any person can bribe the person directly in front of them to swap positions, but they still wear their original sticker.
+         * One person can bribe at most two others.
+         * Determine the minimum number of bribes that took place to get to a given queue order.
+         * Return string with the number of bribes, or, if anyone has bribed more than two people, return 'Too chaotic'.
+         *
+         * Example 1:
+         * q = [2, 1, 5, 3, 4]
+         * Output: 3
+         *
+         * Example 2:
+         * q = [2, 5, 1, 3, 4]
+         * Output: Too chaotic
+         *
+         */
+
+        var bribesCount = 0;
+
+        for (var i = 0; i < q.Count; i++)
+        {
+            var pos = i + 1;
+
+            // Compare sticker value with current position to know if anyone has bribed more than 2 people
+            if (q[i] - pos > 2)
+            {
+                return "Too chaotic";
+            }
+
+            // Given a person is not allowed to bribe more than twice, then avoid checking
+            // every single value and narrow down loop iterations by doing j = Math.Max(0, q[i] - 2)
+            // Credits to Dennis Wang and his blog for this improvement (https://medium.com/@dwang0816/new-year-chaos-41e8e56cb342)
+            for (var j = Math.Max(0, q[i] - 2); j < i; j++)
+            {
+                if (q[j] > q[i])
+                {
+                    bribesCount++;
+                }
+            }
+        }
+
+        return bribesCount.ToString();
+    }
+
+    public static string OrderSizes(string T)
+    {
+        var smalls = new StringBuilder();
+        var mediums = new StringBuilder();
+        var larges = new StringBuilder();
+
+        foreach (var letter in T)
+        {
+            if (letter == 'S')
+            {
+                smalls.Append(letter);
+            }
+            else if (letter == 'M')
+            {
+                mediums.Append(letter);
+            }
+            else if (letter == 'L')
+            {
+                larges.Append(letter);
+            }
+        }
+
+        return smalls
+            .Append(mediums)
+            .Append(larges)
+            .ToString();
+    }
+
+    public static int BinaryGap(int n)
+    {
+        var binary = Convert.ToString(n, 2);
+
+        var maxGap = 0;
+        var gap = 0;
+
+        var openningOne = false;
+
+        for (var i = 0; i < binary.Length; i++)
+        {
+            var curr = binary[i];
+
+            if (curr == '1')
+            {
+                if (openningOne)
+                {
+                    if (gap > maxGap)
+                        maxGap = gap;
+
+                    gap = 0;
+                }
+                else
+                    openningOne = true;
+            }
+            else
+            {
+                gap++;
+            }
+        }
+
+        return maxGap;
+    }
+
+    public static string SuperReducedString(string s)
+    {
+        if (s.Length == 1)
+            return s;
+
+        var result = RemoveDuplicates(s);
+
+        return string.IsNullOrEmpty(result)
+            ? "Empty String"
+            : result;
+    }
+
+    public static string CaesarCipher(string s, int k)
+    {
+        /*
+         * Julius Caesar protected his confidential information by encrypting it using a cipher.
+         * Caesar's cipher shifts each letter by a number of letters. If the shift takes you past the end of the alphabet,
+         * just rotate back to the front of the alphabet. In the case of a rotation by 3, w, x, y and z would map to z, a, b and c.
+         *
+         * Original alphabet:      abcdefghijklmnopqrstuvwxyz
+         * Alphabet rotated +3:    defghijklmnopqrstuvwxyzabc
+         *
+         */
+        var encryptedText = s.ToCharArray();
+
+        if (k > 26)
+        {
+            k %= 26;
+        }
+
+        for (var i = 0; i < encryptedText.Length; i++)
+        {
+            if (!char.IsLetter(encryptedText[i]))
+                continue;
+
+            var letter = encryptedText[i] + k;
+
+            if (char.IsUpper(encryptedText[i])
+                && letter > 'Z')
+            {
+                letter = letter - 'Z' + 'A' - 1;
+            }
+            else if (char.IsLower(encryptedText[i])
+                     && letter > 'z')
+            {
+                letter = letter - 'z' + 'a' - 1;
+            }
+
+            encryptedText[i] = (char)letter;
+        }
+
+        return new string(encryptedText);
+    }
+
+    public static int MinimumNumber(string password)
+    {
+        /*
+         * Louise joined a social networking site to stay in touch with her friends.
+         * The signup page required her to input a name and a password. However, the password must be strong.
+         * The website considers a password to be strong if it satisfies the following criteria:
+         * Its length is at least 6.
+         * It contains at least one digit.
+         * It contains at least one lowercase English character.
+         * It contains at least one uppercase English character.
+         * It contains at least one special character. The special characters are: !@#$%^&*()-+
+         *
+         * She typed a random string of length n in the password field but wasn't sure if it was strong.
+         * Given the string she typed, can you find the minimum number of characters she must add to make her password strong?
+         *
+         * Example:
+         * password = '2bb#A'
+         * This password is 5 characters long and has at least one of each character type. The minimum number of characters to add is 1.
+         *
+         */
+        const string specialCharacters = "!@#$%^&*()-+";
+
+        var hasDigit = false;
+        var hasLower = false;
+        var hasUpper = false;
+        var hasSpecial = false;
+
+        for (var i = 0; i < password.Length; i++)
+        {
+            if (char.IsDigit(password[i]))
+                hasDigit = true;
+
+            if (char.IsLower(password[i]))
+                hasLower = true;
+
+            if (char.IsUpper(password[i]))
+                hasUpper = true;
+
+            if (specialCharacters.IndexOf(password[i]) != -1)
+                hasSpecial = true;
+        }
+
+        var passedValidationsCount = Convert.ToInt32(hasDigit) +
+                                     Convert.ToInt32(hasLower) +
+                                     Convert.ToInt32(hasUpper) +
+                                     Convert.ToInt32(hasSpecial);
+
+        var missingValidationsCount = 4 - passedValidationsCount;
+        var missingCharactersCount = 6 - password.Length;
+
+        return Math.Max(missingValidationsCount, missingCharactersCount);
+    }
+
+
+    #region Private Method(s)
+
+    private static string RemoveDuplicates(string s)
+    {
+        var text = s.ToCharArray();
+
+        var updated = false;
+
+        for (var i = 0; i < text.Length - 1; i++)
+        {
+            var curr = text[i];
+            var next = text[i + 1];
+
+            if (curr == next)
+            {
+                text[i] = ' ';
+                text[i + 1] = ' ';
+
+                updated = true;
+            }
+        }
+
+        var result = new string(text).Replace(" ", string.Empty);
+
+        return updated
+            ? RemoveDuplicates(result)
+            : result;
+    }
+
+    #endregion
 }

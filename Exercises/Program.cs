@@ -1,7 +1,8 @@
 ﻿using Exercises;
 
 /*
- * Examples has been taken from coding platforms like HackerRank
+ * These exercises has been taken from coding platforms like HackerRank.
+ *
  */
 
 Console.WriteLine("-----------------------------------------");
