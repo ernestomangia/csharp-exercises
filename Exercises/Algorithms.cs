@@ -461,6 +461,124 @@ public static class Algorithms
         return Math.Max(missingValidationsCount, missingCharactersCount);
     }
 
+    public static int[] RotateArray(int[] a, int k)
+    {
+        /*
+            An array A consisting of N integers is given. Rotation of the array means that each element is shifted right by one index, and 
+            the last element of the array is moved to the first place. 
+            For example, the rotation of array A = [3, 8, 9, 7, 6] is [6, 3, 8, 9, 7] 
+            (elements are shifted right by one index and 6 is moved to the first place).
+
+            The goal is to rotate array A K times; that is, each element of A will be shifted to the right K times.
+
+
+            k = 1
+            Input  = [3, 8, 9, 7, 6] 
+            Output = [6, 3, 8, 9, 7]
+
+                0 <= N    <= 100  [0..100]
+                0 <= K    <= 100  [0..100]
+            -1000 <= A[i] <= 1000 [-1000..1000]
+        */
+
+        if (a.Length == 0)
+            return a;
+
+        if (k >= a.Length)
+            k = k % a.Length;
+
+        if (k == 0)
+            return a;
+
+        // Create an array of A length
+        var result = new int[a.Length];
+
+        // Loop over A
+        for (var i = 0; i < a.Length; i++)
+        {
+            // Calculate new index
+            var newIndex = i + k;
+
+            if (newIndex >= a.Length)
+                newIndex = newIndex % a.Length;
+
+            result[newIndex] = a[i];
+        }
+
+        return result;
+    }
+
+    public static int FindUnpairedNumber_Solution1(int[] a)
+    {
+        // Time complexity: O(n) 
+        // Space complexity: O(n) 
+
+        /*
+            1 <= N <= 1,000,000
+            1 <= A[i] <= 1,000,000,000
+
+            all but one A[i] occur an even number of times 
+        */
+
+        if (a.Length == 1)
+            return a[0];
+
+        var result = 0;
+        var counts = new Dictionary<int, int>();
+
+        // Count the occurrence of each number
+        for (var i = 0; i < a.Length; i++)
+        {
+            if (!counts.ContainsKey(a[i]))
+                counts[a[i]] = 0;
+
+            counts[a[i]]++;
+        }
+
+        // Find the number that occurs one time
+        foreach (var key in counts.Keys)
+        {
+            if (counts[key] == 1)
+            {
+                result = key;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public static int FindUnpairedNumber_Solution2(int[] a)
+    {
+        // Time complexity: O(n) 
+        // Space complexity: O(1) 
+
+        /*
+            Using XOR operator is one of the best solutions to solve the problem
+            
+            XOR operator:
+                n XOR n = 0
+                n XOR 0 = n
+
+            So applying XOR operator to all array elements, will give us the number with single occurrence
+
+            a = [1,2,3,3,2]
+              = 1 ^ 2 ^ 3 ^ 3 ^ 2
+              = 1 ^ (2 ^ 2) ^ (3 ^ 3)
+              = 1 ^ 0 ^ 0
+              = 1
+        */
+
+        if (a.Length == 1)
+            return a[0];
+
+        var result = a[0];
+
+        for (var i = 1; i < a.Length; i++)
+            result = result ^ a[i];
+
+        return result;
+    }
 
     #region Private Method(s)
 

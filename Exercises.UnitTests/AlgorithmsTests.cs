@@ -174,8 +174,44 @@ namespace Exercises.UnitTests
             var s1 = "2bb#A";
 
             var result1 = Algorithms.MinimumNumber(s1);
-            
+
             Assert.Equal(1, result1);
+        }
+
+        [Fact]
+        public void Rotate_Array()
+        {
+            var k1 = 5;
+            var arr1 = new int[] { 3, 8, 9, 7, 6 };
+
+            var k2 = 0;
+            var arr2 = new int[] { 3 };
+
+            var k3 = 0;
+            var arr3 = new int[] { };
+
+            var k4 = 1;
+            var arr4 = new int[] { 988, 8, 10};
+
+            var result1 = Algorithms.RotateArray(arr1, k1);
+            var result2 = Algorithms.RotateArray(arr2, k2);
+            var result3 = Algorithms.RotateArray(arr3, k3);
+            var result4 = Algorithms.RotateArray(arr4, k4);
+
+            Assert.Equal(new int[] { 3, 8, 9, 7, 6 }, result1);
+            Assert.Equal(new int[] { 3 }, result2);
+            Assert.Equal(new int[] { }, result3);
+            Assert.Equal(new int[] { 10, 988, 8 }, result4);
+        }
+
+        [Fact]
+        public void Find_Unpaired_Number()
+        {
+            var arr1 = new int[] { 1000, 801, 100, 1000, 100 };
+
+            var result1 = Algorithms.FindUnpairedNumber_Solution2(arr1);
+            
+            Assert.Equal(801, result1);
         }
     }
 }
