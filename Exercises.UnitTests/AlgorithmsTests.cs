@@ -7,7 +7,7 @@ namespace Exercises.UnitTests
     public class AlgorithmsTests
     {
         [Fact]
-        public void Make_Valid_Anagram()
+        public void Test_Make_Valid_Anagram()
         {
             var s1 = "fcrxzwscanmligyxyvym";
             var s2 = "jxwtrhvujlmrpdoqbisbwhmgpmeoke";
@@ -18,7 +18,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Find_The_Difference()
+        public void Test_Find_The_Difference()
         {
             var s1 = "aaabbb";
             var s2 = "bababaz";
@@ -29,7 +29,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Alternating_Characters()
+        public void Test_Alternating_Characters()
         {
             var s1 = "AAAA";
             var s2 = "BBBBB";
@@ -51,7 +51,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Valid_Sherlock_String()
+        public void Test_Valid_Sherlock_String()
         {
             var s1 = "hgfedcbaeabcdefgh";
 
@@ -61,7 +61,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Invalid_Sherlock_String()
+        public void Test_Invalid_Sherlock_String()
         {
             var s1 = "aabbcd";
 
@@ -71,7 +71,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Substring_Count()
+        public void Test_Substring_Count()
         {
             var s1 = "aabbcd";
 
@@ -81,7 +81,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Flipping_Matrix()
+        public void Test_Flipping_Matrix()
         {
             var matrix = new List<List<int>>
             {
@@ -97,7 +97,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Minimum_Bribes()
+        public void Test_Minimum_Bribes()
         {
             var queue1 = new List<int> { 2, 1, 5, 3, 4 };
             var queue2 = new List<int> { 2, 5, 1, 3, 4 };
@@ -110,7 +110,7 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Order_Sizes()
+        public void Test_Order_Sizes()
         {
             var s1 = "SLMSLM";
 
@@ -120,7 +120,43 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Binary_Gap()
+        public void Test_Super_Reduced_String()
+        {
+            var s1 = "aaabccddd";
+
+            var result1 = Algorithms.SuperReducedString(s1);
+
+            Assert.Equal("abd", result1);
+        }
+
+        [Fact]
+        public void Test_Caesar_Cipher()
+        {
+            var s1 = "middle-Outz";
+            var s2 = "Always-Look-on-the-Bright-Side-of-Life";
+            var s3 = "abc";
+
+            var result1 = Algorithms.CaesarCipher(s1, 2);
+            var result2 = Algorithms.CaesarCipher(s2, 5);
+            var result3 = Algorithms.CaesarCipher(s3, 53);
+
+            Assert.Equal("okffng-Qwvb", result1);
+            Assert.Equal("Fqbfdx-Qttp-ts-ymj-Gwnlmy-Xnij-tk-Qnkj", result2);
+            Assert.Equal("bcd", result3);
+        }
+
+        [Fact]
+        public void Test_Minimum_Number()
+        {
+            var s1 = "2bb#A";
+
+            var result1 = Algorithms.MinimumNumber(s1);
+
+            Assert.Equal(1, result1);
+        }
+
+        [Fact]
+        public void Test_Binary_Gap()
         {
             var n1 = 64;            // 1000000      Gap = 0
             var n2 = 31;            // 11111        Gap = 0
@@ -141,45 +177,8 @@ namespace Exercises.UnitTests
             Assert.Equal(29, result5);
         }
 
-
         [Fact]
-        public void Super_Reduced_String()
-        {
-            var s1 = "aaabccddd";
-
-            var result1 = Algorithms.SuperReducedString(s1);
-
-            Assert.Equal("abd", result1);
-        }
-
-        [Fact]
-        public void Caesar_Cipher()
-        {
-            var s1 = "middle-Outz";
-            var s2 = "Always-Look-on-the-Bright-Side-of-Life";
-            var s3 = "abc";
-
-            var result1 = Algorithms.CaesarCipher(s1, 2);
-            var result2 = Algorithms.CaesarCipher(s2, 5);
-            var result3 = Algorithms.CaesarCipher(s3, 53);
-
-            Assert.Equal("okffng-Qwvb", result1);
-            Assert.Equal("Fqbfdx-Qttp-ts-ymj-Gwnlmy-Xnij-tk-Qnkj", result2);
-            Assert.Equal("bcd", result3);
-        }
-
-        [Fact]
-        public void Minimum_Number()
-        {
-            var s1 = "2bb#A";
-
-            var result1 = Algorithms.MinimumNumber(s1);
-
-            Assert.Equal(1, result1);
-        }
-
-        [Fact]
-        public void Rotate_Array()
+        public void Test_Rotate_Array()
         {
             var k1 = 5;
             var arr1 = new int[] { 3, 8, 9, 7, 6 };
@@ -191,7 +190,7 @@ namespace Exercises.UnitTests
             var arr3 = new int[] { };
 
             var k4 = 1;
-            var arr4 = new int[] { 988, 8, 10};
+            var arr4 = new int[] { 988, 8, 10 };
 
             var result1 = Algorithms.RotateArray(arr1, k1);
             var result2 = Algorithms.RotateArray(arr2, k2);
@@ -205,18 +204,17 @@ namespace Exercises.UnitTests
         }
 
         [Fact]
-        public void Find_Unpaired_Number()
+        public void Test_Odd_Occurrences_In_Array()
         {
             var arr1 = new int[] { 1000, 801, 100, 1000, 100 };
 
-            var result1 = Algorithms.FindUnpairedNumber_Solution2(arr1);
+            var result1 = Algorithms.OddOccurrencesInArraySolution2(arr1);
 
-            
             Assert.Equal(801, result1);
         }
 
         [Fact]
-        public void Frog_Jumps()
+        public void Test_Frog_Jumps()
         {
             var x = 50;
             var y = 101;
@@ -225,6 +223,32 @@ namespace Exercises.UnitTests
             var result = Algorithms.FrogJumps(x, y, d);
 
             Assert.Equal(26, result);
+        }
+
+        [Fact]
+        public void Test_Tape_Equilibrium()
+        {
+            var arr = new int[] { 3, 1, 2, 4, 3 };
+
+            var result = Algorithms.TapeEquilibrium(arr);
+
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public void Test_Frog_River_One()
+        {
+            var arr1 = new int[] { 1, 3, 1, 4, 2, 3, 5, 4 };
+            var arr2 = new int[] { 1 };
+            var arr3 = new int[] { 1, 2 };
+
+            var result1 = Algorithms.FrogRiverOne(5, arr1);
+            var result2 = Algorithms.FrogRiverOne(0, arr2);
+            var result3 = Algorithms.FrogRiverOne(10, arr3);
+
+            Assert.Equal(6, result1);
+            Assert.Equal(0, result2);
+            Assert.Equal(-1, result3);
         }
     }
 }

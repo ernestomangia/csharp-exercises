@@ -1,6 +1,6 @@
 # Coding exercises 
 
-These exercises has been taken from coding platforms like HackerRank.
+These exercises has been taken from coding platforms like HackerRank and Codility.
 
 ## Installation
 

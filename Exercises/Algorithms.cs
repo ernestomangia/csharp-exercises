@@ -135,7 +135,6 @@ public static class Algorithms
 
         return "NO";
     }
-
     public static long SubstringCount(int n, string s)
     {
         if (n == 1)
@@ -320,40 +319,6 @@ public static class Algorithms
             .ToString();
     }
 
-    public static int BinaryGap(int n)
-    {
-        var binary = Convert.ToString(n, 2);
-
-        var maxGap = 0;
-        var gap = 0;
-
-        var openningOne = false;
-
-        for (var i = 0; i < binary.Length; i++)
-        {
-            var curr = binary[i];
-
-            if (curr == '1')
-            {
-                if (openningOne)
-                {
-                    if (gap > maxGap)
-                        maxGap = gap;
-
-                    gap = 0;
-                }
-                else
-                    openningOne = true;
-            }
-            else
-            {
-                gap++;
-            }
-        }
-
-        return maxGap;
-    }
-
     public static string SuperReducedString(string s)
     {
         if (s.Length == 1)
@@ -461,9 +426,57 @@ public static class Algorithms
         return Math.Max(missingValidationsCount, missingCharactersCount);
     }
 
+    #region Codility
+
+    public static int BinaryGap(int n)
+    {
+        /*
+            Lesson #1 - https://app.codility.com/programmers/lessons/1-iterations/binary_gap/
+
+            A binary gap within a positive integer N is any maximal sequence of consecutive zeros that is surrounded by 
+            ones at both ends in the binary representation of N.
+        */
+
+        // Time complexity: O(n) 
+
+        var binary = Convert.ToString(n, 2);
+
+        var maxGap = 0;
+        var gap = 0;
+
+        var openningOne = false;
+
+        for (var i = 0; i < binary.Length; i++)
+        {
+            var curr = binary[i];
+
+            if (curr == '1')
+            {
+                if (openningOne)
+                {
+                    if (gap > maxGap)
+                        maxGap = gap;
+
+                    gap = 0;
+                }
+                else
+                    openningOne = true;
+            }
+            else
+            {
+                gap++;
+            }
+        }
+
+        return maxGap;
+    }
+
+
     public static int[] RotateArray(int[] a, int k)
     {
         /*
+            Lesson #2 - https://app.codility.com/programmers/lessons/2-arrays/cyclic_rotation/
+            
             An array A consisting of N integers is given. Rotation of the array means that each element is shifted right by one index, and 
             the last element of the array is moved to the first place. 
             For example, the rotation of array A = [3, 8, 9, 7, 6] is [6, 3, 8, 9, 7] 
@@ -480,6 +493,9 @@ public static class Algorithms
                 0 <= K    <= 100  [0..100]
             -1000 <= A[i] <= 1000 [-1000..1000]
         */
+
+        // Time complexity: O(n) 
+        // Space complexity: O(n) 
 
         if (a.Length == 0)
             return a;
@@ -508,17 +524,23 @@ public static class Algorithms
         return result;
     }
 
-    public static int FindUnpairedNumber_Solution1(int[] a)
+    public static int OddOccurrencesInArraySolution1(int[] a)
     {
-        // Time complexity: O(n) 
-        // Space complexity: O(n) 
-
         /*
+            Lesson #2 - https://app.codility.com/programmers/lessons/2-arrays/odd_occurrences_in_array/
+            
+            A non-empty array A consisting of N integers is given. The array contains an odd number of elements, 
+            and each element of the array can be paired with another element that has the same value, 
+            except for one element that is left unpaired.
+
             1 <= N <= 1,000,000
             1 <= A[i] <= 1,000,000,000
 
             all but one A[i] occur an even number of times 
         */
+
+        // Time complexity: O(n) 
+        // Space complexity: O(n) 
 
         if (a.Length == 1)
             return a[0];
@@ -548,12 +570,11 @@ public static class Algorithms
         return result;
     }
 
-    public static int FindUnpairedNumber_Solution2(int[] a)
+    public static int OddOccurrencesInArraySolution2(int[] a)
     {
-        // Time complexity: O(n) 
-        // Space complexity: O(1) 
-
         /*
+            Lesson #2 - https://app.codility.com/programmers/lessons/2-arrays/odd_occurrences_in_array/
+
             Using XOR operator is one of the best solutions to solve the problem
             
             XOR operator:
@@ -569,6 +590,9 @@ public static class Algorithms
               = 1
         */
 
+        // Time complexity: O(n) 
+        // Space complexity: O(1) 
+
         if (a.Length == 1)
             return a[0];
 
@@ -583,25 +607,25 @@ public static class Algorithms
     public static int FrogJumps(int x, int y, int d)
     {
         /*
-         * A small frog wants to get to the other side of the road. The frog is currently located at position X and
-         * wants to get to a position greater than or equal to Y. The small frog always jumps a fixed distance, D.
-         *
-         * Count the minimal number of jumps that the small frog must perform to reach its target.
-         *
-         * X = 10
-         * Y = 85
-         * D = 30
-         *
-         * the function should return 3
-         *
-         */
+            Lesson #3 - https://app.codility.com/programmers/lessons/3-time_complexity/frog_jmp/
 
-        /*
-         * Time complexity: O(1)
-         *
-         * Calculate Y - X and divide the result by D.
-         * Then, use Ceiling to get the smallest integer >= to the calculated decimal value
-         */
+            A small frog wants to get to the other side of the road. The frog is currently located at position X and
+            wants to get to a position greater than or equal to Y. The small frog always jumps a fixed distance, D.
+
+            Count the minimal number of jumps that the small frog must perform to reach its target.
+
+            X = 10
+            Y = 85
+            D = 30
+
+            Output = 3
+        */
+
+        // Time complexity: O(1)
+
+        // Calculate Y - X and divide the result by D.
+        // Then, use Ceiling to get the smallest integer >= to the calculated decimal value
+
         if (x == y)
             return 0;
 
@@ -610,16 +634,19 @@ public static class Algorithms
         return jumps;
     }
 
-    public static int FindMissingInteger_Solution1(int[] a)
+    public static int PermMissingElemSolution1(int[] a)
     {
         /*
-            An array A consisting of N different integers is given. 
-            The array contains integers in the range [1..(N + 1)], which means that exactly one element is missing.
+            Lesson #3 - https://app.codility.com/programmers/lessons/3-time_complexity/perm_missing_elem/
+
+            An array A consisting of N different integers is given. The array contains integers in the range [1..(N + 1)], 
+            which means that exactly one element is missing.
+
             Your goal is to find that missing element.
 
-            - N is an integer within the range [0..100,000];
-            - the elements of A are all distinct;
-            - each element of array A is an integer within the range [1..(N + 1)].
+            0 <=  N   <= 100,000
+            1 <= A[i] <= N+1
+            A[i] != A[j]
 
             Examples:
                 A = []      => 1
@@ -665,26 +692,9 @@ public static class Algorithms
         return result;
     }
 
-    public static int FindMissingInteger_Solution2(int[] a)
+    public static int PermMissingElemSolution2(int[] a)
     {
-        /*
-            An array A consisting of N different integers is given. 
-            The array contains integers in the range [1..(N + 1)], which means that exactly one element is missing.
-            Your goal is to find that missing element.
-
-            - N is an integer within the range [0..100,000];
-            - the elements of A are all distinct;
-            - each element of array A is an integer within the range [1..(N + 1)].
-
-            Examples:
-                A = []      => 1
-                A = [1]     => 2
-                A = [2]     => 1
-                A = [1,3,4] => 2
-                A = [1,2,3] => 4
-                A = [2,3,4] => 1
-                A = [1,3]   => 1
-        */
+        // Lesson #3 - https://app.codility.com/programmers/lessons/3-time_complexity/perm_missing_elem/
 
         // Time complexity: O(N)
 
@@ -709,6 +719,110 @@ public static class Algorithms
         // The difference is the missing element
         return (int)(totalSum - sum);
     }
+
+    public static int TapeEquilibrium(int[] a)
+    {
+        /*
+            Lesson #3 - https://app.codility.com/programmers/lessons/3-time_complexity/tape_equilibrium/
+            
+            A non-empty array A consisting of N integers is given. Array A represents numbers on a tape.
+            The difference between the two parts is the value of: |(A[0] + A[1] + ... + A[P − 1]) − (A[P] + A[P + 1] + ... + A[N − 1])|
+
+            In other words, it is the absolute difference between the sum of the first part and the sum of the second part.
+        
+                0 <  P   < N
+                2 <  N   < 100,000
+            -1000 < A[i] < 1000
+
+            Example:
+            [3, 1, 2, 4, 3]
+
+                [3]          - [1, 2, 4, 3] = 7
+                [3, 1]       - [2, 4, 3]    = 5
+                [3, 1, 2]    - [4, 3]       = 1
+                [3, 1, 2, 4] - [3]          = 7
+
+        */
+
+        // Time complexity:  O(N)
+        // Space complexity: O(N)
+
+        // Create an array of 'A.Length - 1' length to hold the absolute differences
+        var differences = new int[a.Length - 1];
+        var firstSum = 0;
+        var secondSum = 0;
+
+        // Calculate sum for 1st part. Store values for each position.
+        for (var i = 0; i < a.Length - 1; i++)
+        {
+            firstSum += a[i];
+
+            differences[i] = firstSum;
+        }
+
+        // Calculate sum for 2nd part (from N - 1 to 1) and subtract it from the sum calculated in 1st part
+        for (var j = a.Length - 1; j > 0; j--)
+        {
+            secondSum += a[j];
+
+            differences[j - 1] = Math.Abs(differences[j - 1] - secondSum);
+        }
+
+        var minDiff = differences[0];
+
+        // Get the min difference
+        for (var k = 1; k < differences.Length; k++)
+        {
+            if (differences[k] < minDiff)
+                minDiff = differences[k];
+        }
+
+        return minDiff;
+    }
+
+    public static int FrogRiverOne(int x, int[] a)
+    {
+        /*
+            Lesson #4 - https://app.codility.com/programmers/lessons/4-counting_elements/frog_river_one/
+
+            A small frog wants to get to the other side of a river. 
+            The frog is initially located on one bank of the river (position 0) and 
+            wants to get to the opposite bank (position X+1). 
+            Leaves fall from a tree onto the surface of the river.
+
+            1 <= N, X <= 100,000
+            1 <= A[i] <= X
+
+            Example: 
+                X = 5
+                A = [1, 3, 1, 4, 2, 3, 5, 4]
+                     0  1  2  3  4  5  6  7
+                Output = 6
+        */
+
+        // Time complexity: O(n)
+        // Space complexity: O(n)
+
+        var minTime = -1;
+        var leaves = new Dictionary<int, bool>();
+
+        // Find minimum i where all elements in [1, X] occurs at least 1 time
+        for (var i = 0; i < a.Length; i++)
+        {
+            if (a[i] <= x)
+                leaves[a[i]] = true;
+
+            if (leaves.Keys.Count == x)
+            {
+                minTime = i;
+                break;
+            }
+        }
+
+        return minTime;
+    }
+
+    #endregion
 
     #region Private Method(s)
 
