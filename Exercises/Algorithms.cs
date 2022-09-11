@@ -110,7 +110,7 @@ public static class Algorithms
         if (filteredCounts.Length <= 1)
             return "YES";
 
-        // Sort has O(n) time complexity
+        // Sort has O(N * log N) time complexity
         Array.Sort(filteredCounts);
 
         var first = filteredCounts[0];
@@ -143,8 +143,8 @@ public static class Algorithms
         // Each individual character counts 
         var count = n;
 
+        // Time complexity: O(N^2)
         // Solution works however is not the most efficient one
-        // This is O(N^2)
         for (var i = 0; i < n - 1; i++)
         {
             for (var j = 1; j < n - i; j++)
@@ -437,7 +437,7 @@ public static class Algorithms
             ones at both ends in the binary representation of N.
         */
 
-        // Time complexity: O(n) 
+        // Time complexity: O(N) 
 
         var binary = Convert.ToString(n, 2);
 
@@ -494,8 +494,8 @@ public static class Algorithms
             -1000 <= A[i] <= 1000 [-1000..1000]
         */
 
-        // Time complexity: O(n) 
-        // Space complexity: O(n) 
+        // Time complexity: O(N) 
+        // Space complexity: O(N) 
 
         if (a.Length == 0)
             return a;
@@ -539,8 +539,8 @@ public static class Algorithms
             all but one A[i] occur an even number of times 
         */
 
-        // Time complexity: O(n) 
-        // Space complexity: O(n) 
+        // Time complexity: O(N) 
+        // Space complexity: O(N) 
 
         if (a.Length == 1)
             return a[0];
@@ -590,7 +590,7 @@ public static class Algorithms
               = 1
         */
 
-        // Time complexity: O(n) 
+        // Time complexity: O(N) 
         // Space complexity: O(1) 
 
         if (a.Length == 1)
@@ -800,8 +800,8 @@ public static class Algorithms
                 Output = 6
         */
 
-        // Time complexity: O(n)
-        // Space complexity: O(n)
+        // Time complexity: O(N)
+        // Space complexity: O(N)
 
         var minTime = -1;
         var leaves = new Dictionary<int, bool>();
@@ -820,6 +820,118 @@ public static class Algorithms
         }
 
         return minTime;
+    }
+
+    public static int PermutationCheck(int[] a)
+    {
+        // Lesson #4 - https://app.codility.com/programmers/lessons/4-counting_elements/perm_check/
+
+        // A = [1, 2, 3]    => Permutation
+        // A = [1, 3]       => Not a permutation
+        // A = [1, 4, 1]    => Not a permutation
+
+        // Time complexity: O(N)
+        // Space complexity: O(N)
+
+        var elements = new Dictionary<int, bool>();
+
+        for (var i = 0; i < a.Length; i++)
+        {
+            // Check case [1, 2, 2]
+            if (elements.ContainsKey(a[i]))
+                return 0; // Not a permutation
+
+            // Check case [1, 2, 4]
+            if (a[i] > a.Length)
+                return 0; // Not a permutation
+
+            elements[a[i]] = true;
+        }
+
+        // Case [1, 2, 3, 4]
+        return 1; // Permutation
+    }
+
+    public static int PassingCars(int[] a)
+    {
+        // Lesson #5 - https://app.codility.com/programmers/lessons/5-prefix_sums/
+
+        // 1 <= N <= 100,000
+
+        // [0, 1, 0, 1, 1]
+        //  E  W  E  W  W
+        //    +1    +2 +2
+
+        // Time complexity: O(N)
+
+        var pairs = 0;
+        var eastCount = 0;
+
+        for (var i = 0; i < a.Length; i++)
+        {
+            if (a[i] == 0)
+                eastCount++;
+
+            if (a[i] == 1)
+                pairs += eastCount;
+
+            if (pairs > 1000000000)
+                return -1;
+        }
+
+        return pairs;
+    }
+
+    public static int Distinct(int[] a)
+    {
+        // Lesson #6 - https://app.codility.com/programmers/lessons/6-sorting/distinct/
+
+        // Time complexity: O(N)
+        // Space complexity: O(N)
+
+        var values = new Dictionary<int, bool>();
+
+        foreach (var v in a)
+            values[v] = true;
+
+        return values.Count;
+    }
+
+    public static int Triangle(int[] a)
+    {
+        // Lesson #6 - https://app.codility.com/programmers/lessons/6-sorting/triangle/
+
+        /*
+            [.., ap, aq, ar, ..]
+
+            Conditions:
+                1) ap + aq > ar
+                2) aq + ar > ap
+                3) ar + ap > aq
+         */
+
+        // Time complexity: O(N * log N)
+        // Space complexity: O(1)
+
+        if (a.Length < 3)
+            return 0;
+
+        Array.Sort(a);
+
+        for (var i = 0; i < a.Length - 2; i++)
+        {
+            // Use long to avoid arithmetic overflow error
+            long ap = a[i];
+            long aq = a[i + 1];
+            long ar = a[i + 2];
+
+            // Just check condition #1
+            // Given values are sorted, conditions #2 and #3 are true
+            if (ap + aq > ar)
+                return 1;
+        }
+
+        return 0;
     }
 
     #endregion

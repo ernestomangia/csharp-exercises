@@ -250,5 +250,57 @@ namespace Exercises.UnitTests
             Assert.Equal(0, result2);
             Assert.Equal(-1, result3);
         }
+
+        [Fact]
+        public void Test_Permutation_Check()
+        {
+            var arr1 = new int[] { 1, 1, 2 };
+            var arr2 = new int[] { 1, 2, 4 };
+            var arr3 = new int[] { 1, 2, 3 };
+            var arr4 = new int[] { 1 };
+
+            var result1 = Algorithms.PermutationCheck(arr1);
+            var result2 = Algorithms.PermutationCheck(arr2);
+            var result3 = Algorithms.PermutationCheck(arr3);
+            var result4 = Algorithms.PermutationCheck(arr4);
+
+            Assert.Equal(0, result1);
+            Assert.Equal(0, result2);
+            Assert.Equal(1, result3);
+            Assert.Equal(1, result4);
+        }
+
+        [Fact]
+        public void Test_Passing_Car()
+        {
+            var arr1 = new int[] { 0, 1, 0, 1, 1 };
+
+            var result1 = Algorithms.PassingCars(arr1);
+
+            Assert.Equal(5, result1);
+        }
+
+        [Fact]
+        public void Test_Distinct()
+        {
+            var arr1 = new int[] { -11100, 2, 2, 999, 999, -11100 };
+
+            var result1 = Algorithms.Distinct(arr1);
+
+            Assert.Equal(3, result1);
+        }
+
+        [Fact]
+        public void Test_Triangle()
+        {
+            var arr1 = new int[] { 10, 2, 5, 1, 8, 20 };
+            var arr2 = new int[] { 100, 50, 1, 4 };
+
+            var result1 = Algorithms.Triangle(arr1);
+            var result2 = Algorithms.Triangle(arr2);
+
+            Assert.Equal(1, result1);
+            Assert.Equal(0, result2);
+        }
     }
 }
