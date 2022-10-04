@@ -4,6 +4,8 @@ namespace Exercises;
 
 public static class Algorithms
 {
+    #region HackerRank
+
     public static int MakeAnagram(string a, string b)
     {
         /*
@@ -135,6 +137,7 @@ public static class Algorithms
 
         return "NO";
     }
+
     public static long SubstringCount(int n, string s)
     {
         if (n == 1)
@@ -426,6 +429,132 @@ public static class Algorithms
         return Math.Max(missingValidationsCount, missingCharactersCount);
     }
 
+    public static int MarsExploration(string s)
+    {
+        var result = 0;
+
+        for (var i = 0; i < s.Length; i++)
+        {
+            var idx = i % 3;
+
+            if (idx == 0 && s[i] != 'S'
+                || idx == 1 && s[i] != 'O'
+                || idx == 2 && s[i] != 'S')
+            {
+                result++;
+            }
+        }
+
+        return result;
+    }
+
+    public static string HackerrankInString(string s)
+    {
+        if (s.Length < 10)
+            return "NO";
+
+        var count = 0;
+        var expected = "hackerrank";
+
+        for (var i = 0; i < s.Length; i++)
+        {
+            if (count == 9)
+                return "YES";
+
+            if (s[i] == expected[count])
+                count++;
+        }
+
+        return "NO";
+    }
+
+    #endregion
+
+    #region CodeSignal
+
+    public static int[][] Rotate2DMatrix(int[][] a)
+    {
+        /*
+            a b  =>  c a
+            c d      d b
+            
+                    0           1          n-1
+            0     [0][0]      [0][1]     [0][n-1]
+            1     [1][0]      [1][1]     [1][n-1]
+            n-1   [n-1][0]    [n-1][1]   [n-1][n-1]
+        */
+
+        if (a.Length == 1)
+            return a;
+
+        var n = a.Length;
+
+        for (var i = 0; i < n / 2; i++)
+        {
+            for (var j = i; j < n - 1 - i; j++)
+            {
+                var a1 = a[i][j];
+                var b = a[j][n - 1 - i];
+                var c = a[n - 1 - j][i];
+                var d = a[n - 1 - i][n - 1 - j];
+
+                a[i][j] = c;                    // a => c
+                a[n - 1 - j][i] = d;            // c => d
+                a[n - 1 - i][n - 1 - j] = b;    // d => b
+                a[j][n - 1 - i] = a1;           // b => a
+            }
+        }
+
+        return a;
+    }
+
+    public static string[][] SortDishes(string[][] dishes)
+    {
+        var ingredientsMap = new Dictionary<string, List<string>>();
+
+        for (var i = 0; i < dishes.Length; i++)
+        {
+            var dishName = dishes[i][0];
+
+            for (var j = 1; j < dishes[i].Length; j++)
+            {
+                var ingredientName = dishes[i][j];
+
+                if (ingredientsMap.ContainsKey(ingredientName))
+                    ingredientsMap[ingredientName].Add(dishName);
+                else
+                    ingredientsMap[ingredientName] = new List<string> { dishName };
+            }
+        }
+
+        var result = new List<string[]>();
+
+        foreach (var pair in ingredientsMap)
+        {
+            if (pair.Value.Count < 2)
+                continue;
+
+            var arr = new string[pair.Value.Count + 1];
+
+            arr[0] = pair.Key;
+
+            var orderedDishes = pair.Value.OrderBy(x => x, StringComparer.Ordinal).ToArray();
+
+            for (var i = 0; i < orderedDishes.Length; i++)
+            {
+                arr[i + 1] = orderedDishes[i];
+            }
+
+            result.Add(arr);
+        }
+
+        return result
+            .OrderBy(x => x[0], StringComparer.Ordinal)
+            .ToArray();
+    }
+
+    #endregion
+
     #region Codility
 
     public static int BinaryGap(int n)
@@ -466,6 +595,32 @@ public static class Algorithms
             {
                 gap++;
             }
+        }
+
+        return maxGap;
+    }
+
+    public static int BinaryGap_Solution2(int n)
+    {
+        // Lesson #1 - https://app.codility.com/programmers/lessons/1-iterations/binary_gap/
+
+        var binary = Convert.ToString(n, 2);
+        var stack = new Stack<char>();
+        var maxGap = 0;
+
+        for (var i = 0; i < binary.Length; i++)
+        {
+            var curr = binary[i];
+
+            if (binary[i] == '1')
+            {
+                if (stack.Count > maxGap)
+                    maxGap = stack.Count;
+
+                stack.Clear();
+            }
+            else
+                stack.Push(curr);
         }
 
         return maxGap;
@@ -598,6 +753,7 @@ public static class Algorithms
 
         var result = a[0];
 
+        // XOR
         for (var i = 1; i < a.Length; i++)
             result = result ^ a[i];
 
@@ -822,7 +978,7 @@ public static class Algorithms
         return minTime;
     }
 
-    public static int PermutationCheck(int[] a)
+    public static int IsPermutation(int[] a)
     {
         // Lesson #4 - https://app.codility.com/programmers/lessons/4-counting_elements/perm_check/
 
@@ -897,7 +1053,7 @@ public static class Algorithms
         return values.Count;
     }
 
-    public static int Triangle(int[] a)
+    public static int HasTriangularTriplet(int[] a)
     {
         // Lesson #6 - https://app.codility.com/programmers/lessons/6-sorting/triangle/
 
@@ -934,6 +1090,291 @@ public static class Algorithms
         return 0;
     }
 
+    public static int MaxProductOfThree(int[] a)
+    {
+        /*
+            Lesson #6 - https://app.codility.com/programmers/lessons/6-sorting/max_product_of_three/
+
+            A[P] * A[Q] * A[R] (0 ≤ P < Q < R < N)
+             0   1  2   3  4  5
+            [-3, 1, 2, -2, 5, 6]
+
+            (0, 1, 2) = -6
+            (1, 2, 4) = -10
+            (2, 4, 5) = 60
+
+                3 <   N  < 100,000
+            -1000 < A[i] < 1000
+        */
+
+        // Time complexity: O(N * log(N))
+        // Space complexity: O(1)
+
+        Array.Sort(a);
+
+        // Remember that the product of two negative integers is positive
+        // So given this sorted array [-a, -b, c, d, e]
+        // You need to check which is the max between (-a * -b * e) and (c * d * e)
+
+        // Get the 2 smallest values
+        var p1 = a[0];
+        var q1 = a[1];
+
+        // Get the 3 largest values
+        var p2 = a[a.Length - 3];
+        var q2 = a[a.Length - 2];
+        var r2 = a[a.Length - 1];
+
+        return Math.Max(p1 * q1 * r2, p2 * q2 * r2);
+    }
+
+    public static int DominatorSolution1(int[] a)
+    {
+        // Lesson #8 - https://app.codility.com/programmers/lessons/8-leader/dominator/
+
+        // Time complexity: O(N)
+        // Space complexity: O(N)
+
+        if (a.Length == 0)
+            return -1;
+
+        var occurrences = new Dictionary<int, int>();
+
+        // Count occurrences for each value
+        for (var i = 0; i < a.Length; i++)
+        {
+            if (!occurrences.ContainsKey(a[i]))
+                occurrences[a[i]] = 0;
+
+            occurrences[a[i]]++;
+        }
+
+        var candidate = 0;
+        var maxOccurrence = 0;
+
+        // Get value with max occurrence
+        foreach (var key in occurrences.Keys)
+        {
+            if (occurrences[key] <= maxOccurrence)
+                continue;
+
+            candidate = key;
+            maxOccurrence = occurrences[key];
+        }
+
+        if (maxOccurrence > a.Length / 2)
+        {
+            // Return index of dominator
+            for (var i = 0; i < a.Length; i++)
+            {
+                if (a[i] == candidate)
+                    return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public static int DominatorSolution2(int[] a)
+    {
+        // Lesson #8 - https://app.codility.com/programmers/lessons/8-leader/dominator/
+
+        // Time complexity: O(N)
+        // Space complexity: O(1)
+
+        if (a.Length == 0)
+            return -1;
+
+        var count = 0;
+        var candidateValue = 0;
+        var candidateIndex = 0;
+
+        // Find value with max occurrences
+        for (var i = 0; i < a.Length; i++)
+        {
+            if (count == 0)
+            {
+                count++;
+                candidateValue = a[i];
+                candidateIndex = i;
+            }
+            else
+            {
+                if (candidateValue == a[i])
+                {
+                    count++;
+                }
+                else
+                {
+                    count--;
+                }
+            }
+        }
+
+        var occurrences = 0;
+
+        for (var i = 0; i < a.Length; i++)
+        {
+            if (a[i] == candidateValue)
+                occurrences++;
+        }
+
+        if (occurrences > a.Length / 2)
+        {
+            // Return index of dominator
+            return candidateIndex;
+        }
+
+        return -1;
+    }
+
+    public static int FindEquiLeaders(int[] a)
+    {
+        // Lesson #8 - https://app.codility.com/programmers/lessons/8-leader/equi_leader/
+
+        // Time complexity: O(N)
+        // Space complexity: O(N)
+
+        if (a.Length == 1)
+            return 0;
+
+        var occurrences = new Dictionary<int, int>();
+
+        for (var i = 0; i < a.Length; i++)
+        {
+            if (!occurrences.ContainsKey(a[i]))
+                occurrences[a[i]] = 0;
+
+            occurrences[a[i]]++;
+        }
+
+        var candidate = 0;
+        var candidateCount = 0;
+
+        foreach (var key in occurrences.Keys)
+        {
+            if (occurrences[key] > candidateCount)
+            {
+                candidate = key;
+                candidateCount = occurrences[key];
+            }
+        }
+
+        var equiLeaders = 0;
+
+        if (candidateCount > a.Length / 2)
+        {
+            var leaderCount = 0;
+
+            for (var i = 0; i < a.Length; i++)
+            {
+                if (a[i] == candidate)
+                {
+                    leaderCount++;
+                }
+
+                if (leaderCount > (i + 1) / 2
+                    && candidateCount - leaderCount > (a.Length - i - 1) / 2)
+                {
+                    equiLeaders++;
+                }
+            }
+        }
+
+        return equiLeaders;
+    }
+
+    #endregion
+
+    #region Others
+
+    public static int Epigram(string s)
+    {
+        /*
+            Epigram on Failure
+            Given the following quote by Alan Perlis
+
+            “Dealing with failure is easy: Work hard to improve. Success is also easy to
+            handle: You’ve solved the wrong problem. Work hard to improve.”
+
+            Considering only the alphabetical characters, consonants having the value of
+            their ASCII codes, and vowels having the inverse value of their ASCII codes,
+            what is the sum of the sentence?
+
+            Example:
+            Using the phrase “why and how”, w=119, h=104, y=121, d=100, n=110. 
+            A and O are vowels, so a=-97 o=-111. 
+            The sum of ‘why and how’ = 569.
+        */
+
+        // Time complexity: O(N)
+        // Space complexity: O(N)
+
+        var sum = 0;
+
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (char.IsLetter(s[i]))
+            {
+                var factor = IsVowel(s[i])
+                    ? -1
+                    : 1;
+
+                sum += s[i] * factor;
+            }
+        }
+
+        return sum;
+    }
+
+    public static int PalindromesSumFrom0ToN(int n)
+    {
+        var sum = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            var s1 = i.ToString();
+            var isPalindrome = true;
+
+            for (int j = 0; j < s1.Length / 2; j++)
+            {
+                if (s1[j] == s1[s1.Length - 1 - j])
+                    continue;
+
+                isPalindrome = false;
+                break;
+            }
+
+            if (isPalindrome)
+                sum += i;
+        }
+
+        return sum;
+    }
+
+    public static int SumOddFibonacciLowerThanN(int n)
+    {
+        var sum = 0;
+
+        var fa = 0;
+        var fb = 1;
+
+        for (var i = 0; fb < n; i++)
+        {
+            if (fb % 2 != 0)
+            {
+                sum += fb;
+            }
+
+            var temp = fb;
+
+            fb += fa;
+            fa = temp;
+        }
+
+        return sum;
+    }
+
     #endregion
 
     #region Private Method(s)
@@ -963,6 +1404,15 @@ public static class Algorithms
         return updated
             ? RemoveDuplicates(result)
             : result;
+    }
+
+    private static bool IsVowel(char value)
+    {
+        return value == 'a'
+               || value == 'e'
+               || value == 'i'
+               || value == 'o'
+               || value == 'u';
     }
 
     #endregion
